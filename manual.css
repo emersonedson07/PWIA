@@ -1,3 +1,14 @@
+.menu{
+    background-color: #666666;
+    color: #ffffff;
+    border: 1px solid;
+    
+}
+.item-menu{
+    list-style: none;
+    padding: 10px 20px;
+
+}
 body, html{
     margin: 0;
     padding: 0;
@@ -7,25 +18,23 @@ body, html{
 .container{
     width: 80%;
     background-color: #ffffff;
-    margin: 0 auto;
+    margin: 0 auto;S
     height: 100%;
     display: grid;
-    grid-template-columns: 80% 20%;
+    grid-template-columns: 20% 80%;
     grid-template-rows: 250px auto 100px;
     grid-template-areas: "header header"
-                         " main   sidebar"
+                         "sidebar  main"
                          " footer  footer";
 
 }
-header{
+header{S
     background-color: #ff6500;
     grid-area: header;
 }
  main {
 background-color:#0065ff;
 grid-area: main;
-
-
  }
  aside{
     background-color: #ff65ff;
