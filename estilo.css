@@ -6,7 +6,7 @@ html,body{
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: #e6a3bcda;
+    background-color: #0000;
 }
 .card{
     width: 268px;
@@ -52,7 +52,7 @@ html,body{
 }
 
 .menu{
-    background-color: #666666;
+    background-color: #000;
     color: #ffffff;
     border: 1px solid;
     display: flex;
