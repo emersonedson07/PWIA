@@ -1,9 +1,17 @@
+<input type="text" name="num1" id="numero1"/>
+<input type="text" name="num2" id="numero2"/>
+<br>
+<button id="botao"  onclick="somar ()">
+    +
+ </button>
 <script>
-var tabuada = parseInt ( prompt("digite um numero"))
 
-    for ( var i = 0; i <=10;i++)
+
+function somar()
 {
-document.write (i+ "x" + tabuada+ "=" + (tabuada * i)+ " <br/>")
-}
+var numero1 = document.getElementById("numero1")
+var numero2 = document.getElementById("numero2")
+alert(Number (numero1.value)  + Number (numero2.value))
 
+}
 </script>
