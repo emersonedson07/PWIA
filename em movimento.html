@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pt-Br">
 <head>
   <meta charset="UTF-8">
@@ -7,13 +8,52 @@
     body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #FFF8F3; color: #3D1A6F; }
     header { background: #3D1A6F; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
     nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
-    .hero { background: linear-gradient(135deg, #FF6A3D, #F03D5E); color: white; text-align: center; padding: 60px 20px; }
-    .hero h1 { font-size: 48px; margin-bottom: 20px; }
-    .hero p { font-size: 20px; }
-    .btn { background: #3D1A6F; color: white; padding: 10px 20px; border: none; cursor: pointer; font-weight: bold; text-transform: uppercase; margin-top: 20px; }
+    .hero {
+      background: linear-gradient(135deg, #FF6A3D, #F03D5E);
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+      position: relative;
+    }
+    .hero img {
+      position: absolute;
+      top: 0;
+      right: 0;
+      max-height: 100%;
+      opacity: 0.2;
+    }
+    .hero h1 { font-size: 48px; margin-bottom: 20px; position: relative; z-index: 1; }
+    .hero p { font-size: 20px; position: relative; z-index: 1; }
+    .btn {
+      background: #3D1A6F;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-top: 20px;
+      position: relative;
+      z-index: 1;
+    }
     .section { padding: 50px 20px; max-width: 1000px; margin: auto; }
+    .section img { max-width: 100%; border-radius: 10px; margin-top: 20px; }
     .courses { display: flex; flex-wrap: wrap; gap: 20px; }
-    .course { background: white; border: 2px solid #3D1A6F; padding: 20px; flex: 1; min-width: 200px; text-align: center; }
+    .course {
+      background: white;
+      border: 2px solid #3D1A6F;
+      padding: 20px;
+      flex: 1;
+      min-width: 200px;
+      text-align: center;
+    }
+    .course img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
     footer { background: #121212; color: white; text-align: center; padding: 20px; }
   </style>
 </head>
@@ -33,20 +73,48 @@
   <h1>Movimente sua vida com dança</h1>
   <p>A dança transforma o corpo e liberta a alma</p>
   <button class="btn">Conheça nossos cursos</button>
+  <img src="https://cdn.pixabay.com/photo/2020/04/14/10/21/dance-5041837_1280.jpg" alt="Dançarina hero image">
 </section>
 
 <section class="section" id="sobre">
   <h2>Sobre a Escola</h2>
   <p>A Escola de Dança Em Movimento oferece um ambiente acolhedor e inspirador para todas as idades. Com professores qualificados, promovemos a arte da dança com técnica, expressão e criatividade.</p>
+  <img src="https://cdn.pixabay.com/photo/2017/08/01/08/29/dancers-2566512_1280.jpg" alt="Sobre a escola de dança">
 </section>
 
 <section class="section" id="cursos">
   <h2>Nossos Cursos</h2>
   <div class="courses">
-    <div class="course"><h3>Ballet Clássico</h3><p>Disciplina, técnica e elegância.</p></div>
-    <div class="course"><h3>Dança Contemporânea</h3><p>Expressividade e fluidez.</p></div>
-    <div class="course"><h3>Danças Urbanas</h3><p>Ritmo e atitude.</p></div>
-    <div class="course"><h3>Jazz</h3><p>Energia e precisão.</p></div>
+    <div class="course">
+      <img src="forro.jpg" alt="Forró Pé de Serra">
+      <h3>Forró Pé de Serra</h3>
+      <p>Expressividade e fluidez</p>
+    </div>
+    <div class="course">
+      <img src="zouk1.jpg" alt="Zouk">
+      <h3>Zouk</h3>
+      <p>Disciplina, técnica e elegância</p>
+    </div>
+    <div class="course">
+      <img src="sa1.jpg" alt="Samba De Gafieira">
+      <h3>Samba De Gafieira</h3>
+      <p>Ritmo e atitude.</p>
+    </div>
+    <div class="course">
+      <img src="sr1.jpg" alt="Samba Rock">
+      <h3>Samba Rock</h3>
+      <p>Energia e precisão.</p>
+    </div>
+    <div class="course">
+      <img src="bolero.jpg" alt="Bolero">
+      <h3>Bolero</h3>
+      <p>Energia e precisão.</p>
+    </div>
+    <div class="course">
+      <img src="tango.jpg" alt="Tango">
+      <h3>Tango</h3>
+      <p>Energia e precisão.</p>
+    </div>
   </div>
 </section>
 
