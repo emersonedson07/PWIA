@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>criação de elemento</title>
+</head>
+<body>
+    <h1>criar elemento</h1>
+    <input id="texto" type="text" name="texto" />
+    <div id= "caixa"> </div>
+    <button onclick="criarelemento()">
+        Criar Elemento
+    </button>
+    <script>
+        function criarelemento()
+        {
+           var gigitado
+            var novoh1 = document.createElement("h1")
+            novoh1.style.backgroundColor = "#0065ff"
+            novoh1.style.color = "#ffffff"
+            novoh1.id = "titulo"
+            novoh1.classList.add ("primeirotitulo")
+            novoh1.innerText = "titulo criado dinamicamente"
+
+            var div = document.getElementById ("caixa")
+            div.append(novoh1)
+        }
+    </script>
+</body>
+</html>
