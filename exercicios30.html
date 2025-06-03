@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Exercícios com Arrays</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    button { margin: 5px; padding: 10px 20px; cursor: pointer; }
+    pre { background: #f0f0f0; padding: 10px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Exercícios com Arrays em JavaScript</h1>
+
+  <div id="botoes">
+    <button onclick="ex1()">Exercício 1</button>
+    <button onclick="ex2()">Exercício 2</button>
+    <button onclick="ex3()">Exercício 3</button>
+    <button onclick="ex4()">Exercício 4</button>
+    <button onclick="ex5()">Exercício 5</button>
+    <button onclick="ex6()">Exercício 6</button>
+    <button onclick="ex7()">Exercício 7</button>
+    <button onclick="ex8()">Exercício 8</button>
+    <button onclick="ex9()">Exercício 9</button>
+    <button onclick="ex10()">Exercício 10</button>
+    <button onclick="ex11()">Exercício 11</button>
+  </div>
+
+  <h2>Resultado:</h2>
+  <pre id="resultado"></pre>
+
+  <script>
+    let cores = ['vermelho', 'azul', 'branco'];
+    let numeros = [1, 2, 3];
+    let tarefas = [];
+    let nomes = ['Ana', 'Emerson'];
+    let listaNumeros = [];
+    let lista = [];
+
+    function log(msg) {
+      document.getElementById('resultado').textContent += msg + '\n';
+    }
+
+    function ex1() {
+      cores = ['vermelho', 'azul', 'branco'];
+      log("1: " + cores);
+    }
+
+    function ex2() {
+      cores.push('amarelo');
+      log("2: " + cores);
+    }
+
+    function ex3() {
+      cores.pop();
+      log("3: " + cores);
+    }
+
+    function ex4() {
+      cores.unshift('preto');
+      log("4: " + cores);
+    }
+
+    function ex5() {
+      cores.shift();
+      log("5: " + cores);
+    }
+
+    function ex6() {
+      cores.reverse();
+      log("6: " + cores);
+    }
+
+    function ex7() {
+      numeros = [1, 2, 3];
+      numeros.push(4);
+      numeros.unshift(0);
+      numeros.reverse();
+      log("7: " + numeros);
+    }
+
+    function ex8() {
+      tarefas = [];
+      tarefas.push('jogar video game');
+      tarefas.push('assistir corinthians');
+      tarefas.push('dançar forro');
+      tarefas.pop();
+      log("8: " + tarefas);
+    }
+
+    function ex9() {
+      nomes = ['Ana', 'Emerson'];
+      nomes.unshift('Vicente', 'Ana Maria');
+      nomes.pop();
+      log("9: " + nomes);
+    }
+
+    function ex10() {
+      listaNumeros = [];
+      listaNumeros.push(3);
+      listaNumeros.unshift(4);
+      listaNumeros.unshift(5);
+      listaNumeros.push(2);
+      listaNumeros.push(1);
+      log("10: " + listaNumeros);
+    }
+
+    function ex11() {
+      lista = [];
+      for (let i = 1; i <= 75; i++) {
+        lista.push(i);
+      }
+      lista.splice(0, 25);
+      log("11: " + lista);
+      log("11 - Primeiro número: " + lista[0]);
+    }
+  </script>
+</body>
+</html>
