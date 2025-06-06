@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pokédex</title>
+  <link  rel="stylesheet" href="pokedex.css"/>
+ 
+ 
+</head>
+<img src="poke.png" width="1595" height="300">
+
+<body>
+  <header class="site-header">
+    <h1 class="site-title">Pokédex</h1>
+  </header>
+
+  <div class="search-box">
+    <input type="text" id="search" placeholder="Buscar por nome ou número" />
+    <button onclick="buscarPokemon()">🔍 Buscar</button>
+  </div>
+
+  <div class="advanced-search">
+    <label for="type-filter">Tipo:</label>
+    <select id="type-filter">
+      <option value="">Todos</option>
+    </select>
+
+    <label for="ability-filter">Habilidade:</label>
+    <select id="ability-filter">
+      <option value="">Todas</option>
+    </select>
+
+    <button onclick="aplicarFiltros()">Aplicar Filtros</button>
+  </div>
+
+  <section id="pokemon-container" class="grid-container"></section>
+
+  <script>
+    const pokemonContainer = document.getElementById('pokemon-container');
+    const searchInput = document.getElementById('search');
+    const typeFilter = document.getElementById('type-filter');
+    const abilityFilter = document.getElementById('ability-filter');
+
+    const typeColors = {
+      fire: '#f08030',
+      water: '#6890f0',
+      grass: '#78c850',
+      electric: '#f8d030',
+      bug: '#a8b820',
+      normal: '#a8a878',
+      poison: '#a040a0',
+      ground: '#e0c068',
+      fairy: '#ee99ac',
+      fighting: '#c03028',
+      psychic: '#f85888',
+      rock: '#b8a038',
+      ghost: '#705898',
+      ice: '#98d8d8',
+      dragon: '#7038f8',
+      dark: '#705848',
+      steel: '#b8b8d0',
+      flying: '#a890f0'
+    };
+
+    let allPokemon = [];
+
+    async function fetchPokemon(limit = 151) {
+      for (let i = 1; i <= limit; i++) {
+        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
+        const data = await res.json();
+        allPokemon.push(data);
+      }
+      renderPokemon(allPokemon);
+      populateTypeFilter();
+      populateAbilityFilter();
+    }
+
+    function renderPokemon(pokemonList) {
+      pokemonContainer.innerHTML = '';
+      pokemonList.forEach(pokemon => {
+        const card = document.createElement('div');
+        card.classList.add('pokemon-card');
+
+        const types = pokemon.types.map(t => t.type.name).join(', ');
+        const color = typeColors[pokemon.types[0].type.name] || '#eee';
+
+        card.innerHTML = `
+  <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" />
+  <h3 class="pokemon-name">${pokemon.name}</h3>
+  <p class="pokemon-type" style="color:${color}">${types}</p>
+`;
+
+card.addEventListener('click', () => {
+  localStorage.setItem('pokemonID', pokemon.id);
+  window.location.href = 'pokede2.html';
+});
+
+        pokemonContainer.appendChild(card);
+      });
+    }
+
+    function populateTypeFilter() {
+      const allTypes = new Set();
+      allPokemon.forEach(p => p.types.forEach(t => allTypes.add(t.type.name)));
+      Array.from(allTypes).sort().forEach(type => {
+        const option = document.createElement('option');
+        option.value = type;
+        option.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+        typeFilter.appendChild(option);
+      });
+    }
+
+    function populateAbilityFilter() {
+      const allAbilities = new Set();
+      allPokemon.forEach(p => p.abilities.forEach(a => allAbilities.add(a.ability.name)));
+      Array.from(allAbilities).sort().forEach(ability => {
+        const option = document.createElement('option');
+        option.value = ability;
+        option.textContent = ability.charAt(0).toUpperCase() + ability.slice(1);
+        abilityFilter.appendChild(option);
+      });
+    }
+
+    function buscarPokemon() {
+      const termo = searchInput.value.toLowerCase();
+      const resultado = allPokemon.filter(p =>
+        p.name.includes(termo) || p.id == termo
+      );
+      renderPokemon(resultado);
+    }
+
+    function aplicarFiltros() {
+      const tipoSelecionado = typeFilter.value;
+      const habilidadeSelecionada = abilityFilter.value;
+      let filtrados = allPokemon;
+
+      if (tipoSelecionado) {
+        filtrados = filtrados.filter(p =>
+          p.types.some(t => t.type.name === tipoSelecionado)
+        );
+      }
+
+      if (habilidadeSelecionada) {
+        filtrados = filtrados.filter(p =>
+          p.abilities.some(a => a.ability.name === habilidadeSelecionada)
+        );
+      }
+
+      renderPokemon(filtrados);
+    }
+
+    fetchPokemon();
+  </script>
+</body>
+</html>
