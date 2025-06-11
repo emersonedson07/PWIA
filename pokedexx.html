@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pokédex</title>
+  <link rel="stylesheet" href="pokedex.css" />
+</head>
+<body>
+  <header class="site-header">
+    <h1 class="site-title">Pokédex</h1>
+  </header>
+
+  <img src="poke.png" width="100%" height="300" alt="Banner Pokédex" />
+
+  <div class="search-box">
+    <input type="text" id="search" placeholder="Buscar por nome ou número" />
+    <button onclick="buscarPokemon()">🔍 Buscar</button>
+  </div>
+
+  <div class="advanced-search">
+    <label for="type-filter" style="color:white;">Tipo:</label>
+    <select id="type-filter"><option value="">Todos</option></select>
+
+    <label for="ability-filter" style="color:white; margin-left: 1rem;">Habilidade:</label>
+    <select id="ability-filter"><option value="">Todas</option></select>
+
+    <button onclick="aplicarFiltros()">Aplicar Filtros</button>
+  </div>
+
+  <section id="pokemon-container" class="grid-container"></section>
+
+  <div class="pagination">
+    <button onclick="anteriorPagina()">⬅ Anterior</button>
+    <span id="pagina-atual">Página 1</span>
+    <button onclick="proximaPagina()">Próxima ➡</button>
+  </div>
+
+  <!-- Modal para detalhes do Pokémon -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="fecharModal()">×</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+<script>
+  
+  const pokemonContainer = document.getElementById('pokemon-container');
+  const modal = document.getElementById('modal');
+  const modalBody = document.getElementById('modal-body');
+  const searchInput = document.getElementById('search');
+  const typeFilter = document.getElementById('type-filter');
+  const abilityFilter = document.getElementById('ability-filter');
+  const paginaAtualSpan = document.getElementById('pagina-atual');
+
+  const porPagina = 24;
+  let todosPokemons = [];
+  let pokemonsFiltrados = [];
+  let paginaAtual = 1;
+
+  const typeTranslations = {
+    fire: 'Fogo',
+    water: 'Água',
+    grass: 'Grama',
+    electric: 'Elétrico',
+    bug: 'Inseto',
+    normal: 'Normal',
+    poison: 'Veneno',
+    ground: 'Terra',
+    fairy: 'Fada',
+    fighting: 'Lutador',
+    psychic: 'Psíquico',
+    rock: 'Pedra',
+    ghost: 'Fantasma',
+    ice: 'Gelo',
+    dragon: 'Dragão',
+    dark: 'Noturno',
+    steel: 'Aço',
+    flying: 'Voador'
+  };
+
+  const abilityTranslations = {
+    overgrow: 'Espessura',
+    chlorophyll: 'Clorofila',
+    blaze: 'Chama',
+    torrent: 'Torrente',
+    'shield-dust': 'Pó Protetor',
+    'run-away': 'Fuga',
+    'keen-eye': 'Olho Vivo',
+    intimidate: 'Intimidação',
+    static: 'Estático',
+    'lightning-rod': 'Para-raios',
+    'sand-stream': 'Tempestade de Areia',
+    swarm: 'Enxame',
+    'cute-charm': 'Charme',
+    whirlwind: 'Redemoinho',
+    'flash-fire': 'Chama Induzida',
+    competitive: 'Competitivo',
+    pressure: 'Pressão',
+    'thick-fat': 'Gordura',
+    'early-bird': 'Madrugador',
+    'flame-body': 'Corpo de Chamas',
+    pickup: 'Catador',
+    'dry-skin': 'Pele Seca',
+    'wonder-guard': 'Barreira Mágica',
+    levitate: 'Levitador',
+    drizzle: 'Garoa',
+    'sand-veil': 'Véu de Areia',
+    'snow-cloak': 'Manto de Neve',
+    analytic: 'Analítico',
+    download: 'Download',
+    sturdy: 'Firme',
+    'natural-cure': 'Cura Natural',
+    'magic-guard': 'Guarda Mágica',
+    'sap-sipper': 'Absorve Seiva',
+    'water-absorb': 'Absorção',
+    'motor-drive': 'Motor',
+    'water-veil': 'Véu de Água',
+    'toxic-boost': 'Impulso Tóxico',
+    moxie: 'Valentia',
+    anticipate: 'Antecipação',
+    unnerve: 'Nervosismo',
+    'pure-power': 'Poder Puro',
+    rivalry: 'Rivalidade',
+    'magic-bounce': 'Reflexo Mágico',
+    'solid-rock': 'Rocha Sólida',
+    filter: 'Filtro',
+    soundproof: 'À Prova de Som',
+    'snow-warning': 'Alerta de Neve',
+    'solar-power': 'Poder Solar',
+    'leaf-guard': 'Guarda Folha',
+    'quick-feet': 'Pés Rápidos',
+    multiscale: 'Multiescala',
+    unaware: 'Ignorante',
+    plus: 'Mais',
+    minus: 'Menos',
+    forecast: 'Previsão',
+    'slow-start': 'Início Lento',
+    'heavy-metal': 'Metal Pesado',
+    'light-metal': 'Metal Leve',
+    'swift-swim': 'Nado Rápido',
+    damp: 'Úmido',
+    'sand-rush': 'Corrida na Areia',
+    harvest: 'Colheita',
+    frantic: 'Desespero',
+    unburden: 'Descarrego',
+    'weak-armor': 'Armadura Fraca',
+    'wonder-skin': 'Pele Maravilha',
+    prankster: 'Brincalhão',
+    'rain-dish': 'Chuva Purificadora',
+    'sand-force': 'Força da Areia',
+    galvanize: 'Eletrificação',
+    'aura-break': 'Quebra Aura',
+    'flower-veil': 'Véu Floral',
+    'grand-armour': 'Grande Armadura',
+    'primordia-sea': 'Mar Primordial',
+  };
+
+  async function carregarPokemons() {
+    const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1010");
+    const data = await res.json();
+
+    const promises = data.results.map(p => fetch(p.url).then(r => r.json()));
+    todosPokemons = await Promise.all(promises);
+
+    pokemonsFiltrados = [...todosPokemons];
+    atualizarFiltros();
+    mostrarPagina(1);
+  }
+
+  function mostrarPagina(pagina) {
+    paginaAtual = pagina;
+    const inicio = (pagina - 1) * porPagina;
+    const fim = inicio + porPagina;
+    const paginados = pokemonsFiltrados.slice(inicio, fim);
+    renderPokemon(paginados);
+    paginaAtualSpan.textContent = `Página ${pagina}`;
+  }
+
+  function proximaPagina() {
+    const totalPaginas = Math.ceil(pokemonsFiltrados.length / porPagina);
+    if (paginaAtual < totalPaginas) mostrarPagina(paginaAtual + 1);
+  }
+
+  function anteriorPagina() {
+    if (paginaAtual > 1) mostrarPagina(paginaAtual - 1);
+  }
+
+  function renderPokemon(lista) {
+    pokemonContainer.innerHTML = '';
+    lista.forEach(pokemon => {
+      const card = document.createElement('div');
+      card.classList.add('pokemon-card');
+
+      // Traduzir tipos e mostrar todos
+      const tiposTraduzidos = pokemon.types.map(t => typeTranslations[t.type.name] || t.type.name).join(', ');
+
+      const nome = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+
+      card.innerHTML = `
+        <img src="${pokemon.sprites.front_default}" alt="${nome}" />
+        <h3 class="pokemon-name">${nome}</h3>
+        <p class="pokemon-type" style="color:white;">${tiposTraduzidos}</p>
+      `;
+
+      card.onclick = () => abrirModalDetalhes(pokemon);
+      pokemonContainer.appendChild(card);
+    });
+  }
+
+  function buscarPokemon() {
+    const termo = searchInput.value.toLowerCase().trim();
+    if (!termo) {
+      pokemonsFiltrados = [...todosPokemons];
+      mostrarPagina(1);
+      return;
+    }
+    const resultado = todosPokemons.filter(p => 
+      p.name.includes(termo) || p.id.toString() === termo
+    );
+    pokemonsFiltrados = resultado;
+    mostrarPagina(1);
+  }
+
+  function aplicarFiltros() {
+    const tipo = typeFilter.value;
+    const habilidade = abilityFilter.value;
+
+    let filtrados = [...todosPokemons];
+
+    if (tipo) {
+      filtrados = filtrados.filter(p => p.types.some(t => t.type.name === tipo));
+    }
+
+    if (habilidade) {
+      filtrados = filtrados.filter(p => p.abilities.some(a => a.ability.name === habilidade));
+    }
+
+    pokemonsFiltrados = filtrados;
+    mostrarPagina(1);
+  }
+
+  function atualizarFiltros() {
+    const tipos = new Set();
+    const habilidades = new Set();
+
+    todosPokemons.forEach(p => {
+      p.types.forEach(t => tipos.add(t.type.name));
+      p.abilities.forEach(a => habilidades.add(a.ability.name));
+    });
+
+    typeFilter.innerHTML = '<option value="">Todos</option>';
+    [...tipos].sort().forEach(t => {
+      const nomeTraduzido = typeTranslations[t] || t;
+      typeFilter.innerHTML += `<option value="${t}">${nomeTraduzido}</option>`;
+    });
+
+    abilityFilter.innerHTML = '<option value="">Todas</option>';
+    [...habilidades].sort().forEach(h => {
+      const nomeTraduzido = abilityTranslations[h] || h;
+      abilityFilter.innerHTML += `<option value="${h}">${nomeTraduzido}</option>`;
+    });
+  }
+
+  async function abrirModalDetalhes(pokemon) {
+    modalBody.innerHTML = 'Carregando...';
+    modal.classList.add('show');
+
+    try {
+      const speciesData = await fetch(pokemon.species.url).then(r => r.json());
+      const chainData = await fetch(speciesData.evolution_chain.url).then(r => r.json());
+
+      const evolucao = [];
+      function extrairEvolucao(chain) {
+        evolucao.push(chain.species.name);
+        if (chain.evolves_to.length > 0) extrairEvolucao(chain.evolves_to[0]);
+      }
+      extrairEvolucao(chainData.chain);
+
+      // Traduzir tipos e habilidades para modal
+      const tiposTraduzidos = pokemon.types.map(t => typeTranslations[t.type.name] || t.type.name).join(', ');
+      const habilidadesTraduzidas = pokemon.abilities.map(a => abilityTranslations[a.ability.name] || a.ability.name).join(', ');
+
+      let html = `<h2 style="text-transform: capitalize;">${pokemon.name}</h2>
+        <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
+        <p><strong>Tipo:</strong> <span style="color:white;">${tiposTraduzidos}</span></p>
+        <p><strong>Habilidades:</strong> <span style="color:white;">${habilidadesTraduzidas}</span></p>
+        <h3>Status:</h3>`;
+
+      pokemon.stats.forEach(stat => {
+        html += `<p>${stat.stat.name}: ${stat.base_stat}</p>`;
+      });
+
+      html += `<h3>Evolução:</h3><div class="evolution-chain">`;
+      evolucao.forEach(name => {
+        const poke = todosPokemons.find(p => p.name === name);
+        if (poke) {
+          html += `
+            <div>
+              <img src="${poke.sprites.front_default}" alt="${name}">
+              <span style="text-transform: capitalize;">${name}</span>
+            </div>
+          `;
+        }
+      });
+      html += '</div>';
+
+      modalBody.innerHTML = html;
+    } catch (err) {
+      modalBody.innerHTML = '<p>Erro ao carregar detalhes.</p>';
+    }
+  }
+
+  function fecharModal() {
+    modal.classList.remove('show');
+  }
+
+  carregarPokemons();
+</script>
+
+</body>
+</html>
