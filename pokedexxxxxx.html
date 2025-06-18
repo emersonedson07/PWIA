@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pokédex</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background: url('https://techaeris.com/wp-content/uploads/2017/05/Gotta-Catch-Em-All-Pokemon-FI.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: 'Oxanium', cursive;
+      margin: 0;
+    }
+
+    .pokedex {
+      display: flex;
+      flex-direction: column;
+      background: #c93030;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 5px 5px 15px #444;
+      width: 600px;
+      max-width: 90vw;
+      gap: 10px;
+    }
+
+    #toggle-button {
+      align-self: flex-start;
+      margin-bottom: 10px;
+      padding: 8px 16px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background-color: #333;
+      color: white;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+
+    #toggle-button:hover {
+      background-color: #555;
+    }
+
+    .pokedex-content {
+      display: flex;
+      gap: 20px;
+    }
+
+    .left, .right {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+    }
+
+    .left {
+      width: 300px;
+      text-align: center;
+    }
+
+    .pokemon-image-wrapper {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 10px auto;
+      background: url('https://www.icegif.com/wp-content/uploads/icegif-2652.gif') no-repeat center center;
+      background-size: cover;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .pokemon-image {
+      width: 140px;
+      height: auto;
+      position: relative;
+      z-index: 2;
+      filter: drop-shadow(0 0 5px rgba(0,0,0,0.6));
+      border-radius: 10px;
+    }
+
+    .number {
+      margin: 5px 0;
+      font-weight: bold;
+    }
+
+    .type-species {
+      margin-bottom: 10px;
+      color: #666;
+    }
+
+    .search-bar input {
+      padding: 5px;
+      width: 70%;
+      border-radius: 5px;
+      border: 1px solid #aaa;
+    }
+
+    .search-bar button {
+      padding: 5px 10px;
+      border: none;
+      background: #c93030;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+
+    .nav-buttons button {
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      background-color: #c93030;
+      color: white;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s ease;
+      width: 120px;
+      text-align: center;
+    }
+
+    .nav-buttons button:hover {
+      background-color: #555;
+    }
+
+    .right {
+      width: 250px;
+    }
+
+    .info-box {
+      background: #f7f7f7;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .types span {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 10px;
+      color: white;
+      margin-right: 5px;
+      text-transform: capitalize;
+    }
+
+    .grass { background-color: #78C850; }
+    .poison { background-color: #A040A0; }
+    .fire { background-color: #F08030; }
+    .water { background-color: #6890F0; }
+    .flying { background-color: #A890F0; }
+    .bug { background-color: #A8B820; }
+    .normal { background-color: #A8A878; }
+    .electric { background-color: #F8D030; }
+    .ground { background-color: #E0C068; }
+    .fairy { background-color: #EE99AC; }
+    .fighting { background-color: #C03028; }
+    .psychic { background-color: #F85888; }
+    .rock { background-color: #B8A038; }
+    .ghost { background-color: #705898; }
+    .ice { background-color: #98D8D8; }
+    .dragon { background-color: #38ebf8; }
+    .dark { background-color: #705848; }
+    .steel { background-color: #B8B8D0; }
+
+    .stat-bar {
+      display: inline-block;
+      height: 8px;
+      background: #ddd;
+      border-radius: 4px;
+      width: 100px;
+      margin-left: 5px;
+      position: relative;
+    }
+
+    .fill {
+      height: 100%;
+      border-radius: 4px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: #7038F8;
+    }
+  </style>
+</head>
+<body>
+
+<div class="pokedex">
+  <button id="toggle-button" aria-pressed="true">Pokédex: Ligada</button>
+  <div class="pokedex-content">
+    <div class="left">
+      <h1 id="pokemon-name">Carregando...</h1>
+      <div class="pokemon-image-wrapper">
+        <img id="pokemon-image" src="" alt="Imagem do Pokémon" class="pokemon-image" />
+      </div>
+      <div class="number" id="pokemon-number"></div>
+      <div class="type-species" id="species"></div>
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Nome ou Número" />
+        <button onclick="searchPokemon()">Buscar</button>
+      </div>
+      <div class="nav-buttons">
+        <button onclick="previousPokemon()">Anterior</button>
+        <button onclick="nextPokemon()">Próximo</button>
+      </div>
+    </div>
+    <div class="right">
+      <div class="info-box"><strong>Tipo:</strong><br /><div class="types" id="types"></div></div>
+      <div class="info-box"><strong>Habilidades:</strong><br /><div id="abilities"></div></div>
+      <div class="info-box stats"><strong>Status Base:</strong><br /><div id="stats"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const pokemonName = document.getElementById('pokemon-name');
+  const pokemonNumber = document.getElementById('pokemon-number');
+  const pokemonImage = document.getElementById('pokemon-image');
+  const typesDiv = document.getElementById('types');
+  const abilitiesDiv = document.getElementById('abilities');
+  const statsDiv = document.getElementById('stats');
+  const searchInput = document.getElementById('search-input');
+  const speciesText = document.getElementById('species');
+  const toggleBtn = document.getElementById('toggle-button');
+  const pokedexContent = document.querySelector('.pokedex-content');
+
+  let currentPokemon = 1;
+
+  const typeTranslations = {
+    normal: "Normal", fighting: "Lutador", flying: "Voador", poison: "Venenoso",
+    ground: "Terrestre", rock: "Pedra", bug: "Inseto", ghost: "Fantasma",
+    steel: "Aço", fire: "Fogo", water: "Água", grass: "Grama",
+    electric: "Elétrico", psychic: "Psíquico", ice: "Gelo", dragon: "Dragão",
+    dark: "Sombrio", fairy: "Fada", shadow: "Sombra", unknown: "Desconhecido"
+  };
+
+  const abilityTranslations = {
+    "overgrow": "Crescimento", "chlorophyll": "Clorofila", "blaze": "Chama",
+    "torrent": "Torrente", "shield-dust": "Pó de Escudo", "run-away": "Fuga",
+    "adaptability": "Adaptabilidade", "solar-power": "Poder Solar"
+  };
+
+  const statsTranslations = {
+    "hp": "HP", "attack": "Ataque", "defense": "Defesa",
+    "special-attack": "Ataque Especial", "special-defense": "Defesa Especial",
+    "speed": "Velocidade"
+  };
+
+  function translateType(type) {
+    return typeTranslations[type] || type;
+  }
+
+  function translateAbility(ability) {
+    return abilityTranslations[ability] || ability;
+  }
+
+  function translateStat(stat) {
+    return statsTranslations[stat] || stat;
+  }
+
+  async function fetchPokemon(pokemon) {
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
+    if (!res.ok) throw new Error('Pokémon não encontrado');
+    const data = await res.json();
+    const speciesRes = await fetch(data.species.url);
+    const speciesData = await speciesRes.json();
+    return { data, speciesData };
+  }
+
+  function createStatBar(stat, value) {
+    return `<div>${stat}: ${value}<div class="stat-bar"><div class="fill" style="width:${value}%"></div></div></div>`;
+  }
+
+  async function renderPokemon(pokemon) {
+    try {
+      pokemonName.textContent = 'Carregando...';
+      const { data, speciesData } = await fetchPokemon(pokemon);
+      currentPokemon = data.id;
+
+      const ptName = speciesData.names.find(n => n.language.name === 'pt');
+      pokemonName.textContent = ptName ? ptName.name : data.name;
+
+      pokemonNumber.textContent = `#${String(data.id).padStart(3, '0')}`;
+      pokemonImage.src = data.sprites.other['official-artwork'].front_default;
+      pokemonImage.alt = ptName ? ptName.name : data.name;
+
+      typesDiv.innerHTML = '';
+      data.types.forEach(t => {
+        const span = document.createElement('span');
+        span.textContent = translateType(t.type.name);
+        span.className = t.type.name;
+        typesDiv.appendChild(span);
+      });
+
+      abilitiesDiv.innerHTML = '';
+      data.abilities.forEach(abil => {
+        const abilName = translateAbility(abil.ability.name);
+        abilitiesDiv.innerHTML += abil.is_hidden ? `<em>Oculta:</em> ${abilName}<br>` : `${abilName}<br>`;
+      });
+
+      statsDiv.innerHTML = '';
+      data.stats.forEach(stat => {
+        const statName = translateStat(stat.stat.name);
+        statsDiv.innerHTML += createStatBar(statName, stat.base_stat);
+      });
+
+      const genus = speciesData.genera.find(g => g.language.name === 'pt');
+      speciesText.textContent = genus ? genus.genus : '';
+    } catch {
+      alert('Pokémon não encontrado!');
+    }
+  }
+
+  function searchPokemon() {
+    const query = searchInput.value.trim().toLowerCase();
+    if (query) renderPokemon(query);
+  }
+
+  function previousPokemon() {
+    if (currentPokemon > 1) renderPokemon(currentPokemon - 1);
+  }
+
+  function nextPokemon() {
+    renderPokemon(currentPokemon + 1);
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    const isVisible = pokedexContent.style.display !== 'none';
+    if (isVisible) {
+      pokedexContent.style.display = 'none';
+      toggleBtn.textContent = 'Pokédex: Desligada';
+      toggleBtn.setAttribute('aria-pressed', 'false');
+    } else {
+      pokedexContent.style.display = 'flex';
+      toggleBtn.textContent = 'Pokédex: Ligada';
+      toggleBtn.setAttribute('aria-pressed', 'true');
+    }
+  });
+
+  renderPokemon(currentPokemon);
+</script>
+
+</body>
+</html>
+

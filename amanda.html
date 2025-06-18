@@ -1,584 +1,205 @@
+Pokedex
+emerson edson camargo da silva<emerson.edson07@gmail.com>
+​
+EMERSON EDSON CAMARGO DA SILVA
+​
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pokédex Completa</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Pokédex</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png">
+
+  <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    /* Estilos gerais */
-    body {
-      background: #222;
-      color: white;
-      font-family: Arial, sans-serif;
-      margin: 0; padding: 20px;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    h1 {
-      font-size: 3rem;
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Oxanium', cursive;
     }
 
-    /* Container dos pokémons em grid */
-    #pokemon-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 16px;
-    }
-
-    /* Card individual */
-    .pokemon-card {
-      background: #333;
-      border-radius: 8px;
-      padding: 10px;
-      cursor: pointer;
+    body {
       text-align: center;
-      transition: background 0.3s;
-      box-shadow: 0 0 8px rgba(255,255,255,0.1);
-    }
-    .pokemon-card:hover {
-      background: #555;
+      background: linear-gradient(to bottom, #6ab7f5, #fff);
+      min-height: 100vh;
     }
 
-    .pokemon-card img {
-      width: 96px;
-      height: 96px;
-    }
-
-    .pokemon-name {
-      margin: 8px 0 4px;
-      font-weight: bold;
-      font-size: 1.1rem;
-      text-transform: capitalize;
-    }
-
-    .pokemon-type {
-      font-size: 0.9rem;
-      color: #eee;
-    }
-
-    /* Busca e filtros */
-    .search-box, .advanced-search {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-    }
-
-    input[type="text"], select {
-      padding: 8px;
-      border-radius: 6px;
-      border: none;
-      font-size: 1rem;
-      min-width: 200px;
-    }
-
-    button {
-      padding: 8px 14px;
-      background: #666;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background: #888;
-    }
-
-    /* Paginação */
-    .pagination {
-      text-align: center;
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    /* Modal para detalhes */
-    .modal {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-    .modal.show {
-      display: flex;
-    }
-
-    .modal-content {
-      background: #444;
-      border-radius: 10px;
-      padding: 20px;
-      width: 90%;
-      max-width: 500px;
-      color: white;
+    main {
+      display: inline-block;
+      margin-top: 2%;
+      padding: 15px;
       position: relative;
-      max-height: 90vh;
-      overflow-y: auto;
-      text-align: center;
     }
 
-    .modal-close {
+    .pokedex {
+      width: 100%;
+      max-width: 425px;
+    }
+
+    .pokemon__image {
       position: absolute;
-      top: 10px; right: 15px;
-      font-size: 2rem;
-      background: none;
-      border: none;
+      bottom: 55%;
+      left: 50%;
+      transform: translate(-63%, 20%);
+      height: 18%;
+    }
+
+    .pokemon__data {
+      position: absolute;
+      font-weight: 600;
+      color: #aaa;
+      top: 54.5%;
+      right: 27%;
+      font-size: clamp(8px, 5vw, 25px);
+    }
+
+    .pokemon__name {
+      color: #3a444d;
+      text-transform: capitalize;
+    }
+
+    .form {
+      position: absolute;
+      width: 65%;
+      top: 65%;
+      left: 13.5%;
+    }
+
+    .input__search {
+      width: 100%;
+      padding: 4%;
+      outline: none;
+      border: 2px solid #333;
+      border-radius: 5px;
+      font-weight: 600;
+      color: #3a444d;
+      font-size: clamp(8px, 5vw, 1rem);
+      box-shadow: -3px 4px 0 #888, -5px 7px 0 #333;
+    }
+
+    .buttons {
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      width: 65%;
+      transform: translate(-57%, 0);
+      display: flex;
+      gap: 20px;
+    }
+
+    .button {
+      width: 50%;
+      padding: 4%;
+      border: 2px solid #000;
+      border-radius: 5px;
+      font-size: clamp(8px, 5vw, 1rem);
+      font-weight: 600;
       color: white;
+      background-color: #444;
+      box-shadow: -2px 3px 0 #222, -4px 6px 0 #000;
       cursor: pointer;
     }
 
-    .modal-content img {
-      width: 150px;
-      height: 150px;
-    }
-
-    .evolution-chain {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-
-    .evolution-chain div {
-      text-align: center;
-      font-size: 0.9rem;
-      text-transform: capitalize;
-    }
-    .evolution-chain img {
-      width: 72px;
-      height: 72px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(255,255,255,0.2);
-    }
-
-    /* Scroll bar modal */
-    .modal-content::-webkit-scrollbar {
-      width: 8px;
-    }
-    .modal-content::-webkit-scrollbar-thumb {
-      background: #888;
-      border-radius: 4px;
+    .button:active {
+      box-shadow: inset -4px 4px 0 #222;
+      transform: scale(0.98);
     }
   </style>
+
 </head>
 <body>
+  
+  <main>
+    <img src="#" alt="pokemon" class="pokemon__image">
 
-<header>
-  <h1>Pokédex Completa</h1>
-</header>
+    <h1 class="pokemon__data">
+      <span class="pokemon__number"></span> -
+      <span class="pokemon__name"></span>
+    </h1>
 
-<!-- Caixa de busca simples -->
-<div class="search-box">
-  <input type="text" id="search" placeholder="Buscar por nome ou número" />
-  <button onclick="buscarPokemon()">🔍 Buscar</button>
-</div>
+    <form class="form">
+      <input
+        type="search"
+        class="input__search"
+        placeholder="Name or Number"
+        required
+      />
+    </form>
 
-<!-- Filtros avançados -->
-<div class="advanced-search">
-  <label for="type-filter">Tipo:</label>
-  <select id="type-filter"><option value="">Todos</option></select>
+    <div class="buttons">
+      <button class="button btn-prev">Prev &lt;</button>
+      <button class="button btn-next">Next &gt;</button>
+    </div>
 
-  <label for="ability-filter">Habilidade:</label>
-  <select id="ability-filter"><option value="">Todas</option></select>
+    <img src="https://raw.githubusercontent.com/thiagomartinsss/pokedex/main/images/pokedex.png" alt="pokedex" class="pokedex">
+  </main>
 
-  <button onclick="aplicarFiltros()">Aplicar Filtros</button>
-</div>
+  <script>
+    const pokemonName = document.querySelector('.pokemon__name');
+    const pokemonNumber = document.querySelector('.pokemon__number');
+    const pokemonImage = document.querySelector('.pokemon__image');
 
-<!-- Container onde os pokémons serão exibidos -->
-<section id="pokemon-container"></section>
+    const form = document.querySelector('.form');
+    const input = document.querySelector('.input__search');
+    const buttonPrev = document.querySelector('.btn-prev');
+    const buttonNext = document.querySelector('.btn-next');
 
-<!-- Paginação -->
-<div class="pagination">
-  <button onclick="anteriorPagina()">⬅ Anterior</button>
-  <span id="pagina-atual">Página 1</span>
-  <button onclick="proximaPagina()">Próxima ➡</button>
-</div>
+    let searchPokemon = 1;
 
-<!-- Modal para detalhes -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <button class="modal-close" onclick="fecharModal()">×</button>
-    <div id="modal-body"></div>
-  </div>
-</div>
+    const fetchPokemon = async (pokemon) => {
+      const APIResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
 
-<script>
-  // Referências aos elementos HTML
-  const pokemonContainer = document.getElementById('pokemon-container');
-  const modal = document.getElementById('modal');
-  const modalBody = document.getElementById('modal-body');
-  const searchInput = document.getElementById('search');
-  const typeFilter = document.getElementById('type-filter');
-  const abilityFilter = document.getElementById('ability-filter');
-  const paginaAtualSpan = document.getElementById('pagina-atual');
-
-  // Quantidade de pokémons por página
-  const porPagina = 24;
-
-  // Variáveis globais que armazenam os pokémons e filtrados
-  let todosPokemons = [];
-  let pokemonsFiltrados = [];
-  let paginaAtual = 1;
-
-  // Tradução dos tipos para português
-  const typeTranslations = {
-    fire: 'Fogo',
-    water: 'Água',
-    grass: 'Grama',
-    electric: 'Elétrico',
-    bug: 'Inseto',
-    normal: 'Normal',
-    poison: 'Veneno',
-    ground: 'Terra',
-    fairy: 'Fada',
-    fighting: 'Lutador',
-    psychic: 'Psíquico',
-    rock: 'Pedra',
-    ghost: 'Fantasma',
-    ice: 'Gelo',
-    dragon: 'Dragão',
-    dark: 'Noturno',
-    steel: 'Aço',
-    flying: 'Voador'
-  };
-
-  // Tradução das habilidades para português
-  const abilityTranslations = {
-    overgrow: 'Espessura',
-    chlorophyll: 'Clorofila',
-    blaze: 'Chama',
-    torrent: 'Torrente',
-    'shield-dust': 'Pó Protetor',
-    'run-away': 'Fuga',
-    'keen-eye': 'Olho Vivo',
-    intimidate: 'Intimidação',
-    static: 'Estático',
-    'lightning-rod': 'Para-raios',
-    'sand-stream': 'Tempestade de Areia',
-    swarm: 'Enxame',
-    'cute-charm': 'Charme',
-    whirlwind: 'Redemoinho',
-    'flash-fire': 'Chama Induzida',
-    competitive: 'Competitivo',
-    pressure: 'Pressão',
-    'thick-fat': 'Gordura',
-    'early-bird': 'Madrugador',
-    'flame-body': 'Corpo de Chamas',
-    pickup: 'Catador',
-    'dry-skin': 'Pele Seca',
-    'wonder-guard': 'Barreira Mágica',
-    levitate: 'Levitador',
-    drizzle: 'Garoa',
-    'sand-veil': 'Véu de Areia',
-    'snow-cloak': 'Manto de Neve',
-    analytic: 'Analítico',
-    download: 'Download',
-    sturdy: 'Firme',
-    'natural-cure': 'Cura Natural',
-    'magic-guard': 'Guarda Mágica',
-    'sap-sipper': 'Absorve Seiva',
-    'water-absorb': 'Absorção',
-    'motor-drive': 'Motor',
-    'water-veil': 'Véu de Água',
-    'toxic-boost': 'Impulso Tóxico',
-    moxie: 'Valentia',
-    anticipate: 'Antecipação',
-    unnerve: 'Nervosismo',
-    'pure-power': 'Poder Puro',
-    rivalry: 'Rivalidade',
-    'magic-bounce': 'Reflexo Mágico',
-    'solid-rock': 'Rocha Sólida',
-    filter: 'Filtro',
-    soundproof: 'À Prova de Som',
-    'snow-warning': 'Alerta de Neve',
-    'solar-power': 'Poder Solar',
-    'leaf-guard': 'Guarda Folha',
-    'quick-feet': 'Pés Rápidos',
-    multiscale: 'Multiescala',
-    unaware: 'Ignorante',
-    plus: 'Mais',
-    minus: 'Menos',
-    forecast: 'Previsão',
-    'slow-start': 'Início Lento',
-    'heavy-metal': 'Metal Pesado',
-    'light-metal': 'Metal Leve',
-    'swift-swim': 'Nado Rápido',
-    damp: 'Úmido',
-    'sand-rush': 'Corrida na Areia',
-    harvest: 'Colheita',
-    frantic: 'Desespero',
-    unburden: 'Descarrego',
-    'weak-armor': 'Armadura Fraca',
-    'wonder-skin': 'Pele Maravilha',
-    prankster: 'Brincalhão',
-    'rain-dish': 'Chuva Purificadora',
-    'sand-force': 'Força da Areia',
-    galvanize: 'Eletrificação',
-    'aura-break': 'Quebra Aura',
-    'flower-veil': 'Véu Floral',
-    'grand-armour': 'Grande Armadura',
-    'primordia-sea': 'Mar Primordial',
-  };
-
-  // Função que carrega os pokémons da API (limite 1010)
-  async function carregarPokemons() {
-    // Pega lista com nomes e URLs dos pokémons
-    const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1010");
-    const data = await res.json();
-
-    // Para cada pokémon, carrega seus dados detalhados (promises paralelas)
-    const promises = data.results.map(p => fetch(p.url).then(r => r.json()));
-    todosPokemons = await Promise.all(promises);
-
-    // Inicialmente todos são mostrados
-    pokemonsFiltrados = [...todosPokemons];
-
-    // Atualiza os filtros com os tipos e habilidades disponíveis
-    atualizarFiltros();
-
-    // Mostra a primeira página
-    mostrarPagina(1);
-  }
-
-  // Exibe a página indicada com os pokémons filtrados
-  function mostrarPagina(pagina) {
-    paginaAtual = pagina;
-
-    // Calcula o intervalo da página
-    const inicio = (pagina - 1) * porPagina;
-    const fim = inicio + porPagina;
-
-    // Seleciona apenas os pokémons dessa página
-    const paginados = pokemonsFiltrados.slice(inicio, fim);
-
-    // Renderiza os cards na tela
-    renderPokemon(paginados);
-
-    // Atualiza o texto da página
-    paginaAtualSpan.textContent = `Página ${paginaAtual} de ${Math.ceil(pokemonsFiltrados.length / porPagina)}`;
-  }
-
-  // Renderiza os cards dos pokémons passados
-  function renderPokemon(pokemons) {
-    pokemonContainer.innerHTML = ''; // limpa tudo
-
-    if (pokemons.length === 0) {
-      pokemonContainer.innerHTML = '<p>Nenhum Pokémon encontrado.</p>';
-      return;
+      if (APIResponse.status === 200) {
+        const data = await APIResponse.json();
+        return data;
+      }
     }
 
-    // Para cada Pokémon, cria um card
-    pokemons.forEach(pokemon => {
-      const card = document.createElement('div');
-      card.className = 'pokemon-card';
+    const renderPokemon = async (pokemon) => {
+      pokemonName.innerHTML = 'Loading...';
+      pokemonNumber.innerHTML = '';
 
-      // Nome capitalizado
-      const nome = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+      const data = await fetchPokemon(pokemon);
 
-      // Traduz tipos para português
-      const tipos = pokemon.types.map(t => typeTranslations[t.type.name] || t.type.name).join(', ');
-
-      card.innerHTML = `
-        <img src="${pokemon.sprites.front_default}" alt="${nome}" />
-        <div class="pokemon-name">${nome}</div>
-        <div class="pokemon-type">${tipos}</div>
-      `;
-
-      // Ao clicar no card abre modal com detalhes
-      card.addEventListener('click', () => abrirModal(pokemon));
-
-      pokemonContainer.appendChild(card);
-    });
-  }
-
-  // Função para buscar Pokémon por nome ou número
-  async function buscarPokemon() {
-    const termo = searchInput.value.toLowerCase().trim();
-
-    if (!termo) {
-      alert("Digite um nome ou número para buscar!");
-      return;
+      if (data) {
+        pokemonImage.style.display = 'block';
+        pokemonName.innerHTML = data.name;
+        pokemonNumber.innerHTML = data.id;
+        pokemonImage.src = data['sprites']['versions']['generation-v']['black-white']['animated']['front_default'];
+        input.value = '';
+        searchPokemon = data.id;
+      } else {
+        pokemonImage.style.display = 'none';
+        pokemonName.innerHTML = 'Not found :c';
+        pokemonNumber.innerHTML = '';
+      }
     }
 
-    try {
-      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${termo}`);
-      if (!res.ok) throw new Error('Pokémon não encontrado');
-
-      const pokemon = await res.json();
-
-      // Mostra somente o Pokémon encontrado
-      pokemonsFiltrados = [pokemon];
-      mostrarPagina(1);
-    } catch (error) {
-      alert("Pokémon não encontrado. Verifique o nome ou número.");
-    }
-  }
-
-  // Função para atualizar os filtros de tipo e habilidade
-  async function atualizarFiltros() {
-    // Pega tipos da API e preenche o select
-    const tiposRes = await fetch("https://pokeapi.co/api/v2/type");
-    const tiposData = await tiposRes.json();
-
-    // Limpa opções (exceto a "Todos")
-    typeFilter.innerHTML = '<option value="">Todos</option>';
-    tiposData.results.forEach(tipo => {
-      // Ignorar tipos especiais da API que não são "de pokémon"
-      if(['shadow', 'unknown'].includes(tipo.name)) return;
-
-      // Traduz e cria option
-      const nomeTipo = typeTranslations[tipo.name] || tipo.name;
-      typeFilter.innerHTML += `<option value="${tipo.name}">${nomeTipo}</option>`;
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      renderPokemon(input.value.toLowerCase());
     });
 
-    // Pega habilidades da API e preenche o select
-    const habRes = await fetch("https://pokeapi.co/api/v2/ability?limit=1000");
-    const habData = await habRes.json();
-
-    abilityFilter.innerHTML = '<option value="">Todas</option>';
-    habData.results.forEach(hab => {
-      // Traduz se possível
-      const nomeHab = abilityTranslations[hab.name] || hab.name;
-      abilityFilter.innerHTML += `<option value="${hab.name}">${nomeHab}</option>`;
-    });
-  }
-
-  // Aplica os filtros selecionados
-  function aplicarFiltros() {
-    const tipoSelecionado = typeFilter.value;
-    const habilidadeSelecionada = abilityFilter.value;
-
-    pokemonsFiltrados = todosPokemons.filter(pokemon => {
-      // Verifica tipo
-      const temTipo = tipoSelecionado ? pokemon.types.some(t => t.type.name === tipoSelecionado) : true;
-
-      // Verifica habilidade
-      const temHabilidade = habilidadeSelecionada ? pokemon.abilities.some(a => a.ability.name === habilidadeSelecionada) : true;
-
-      return temTipo && temHabilidade;
+    buttonPrev.addEventListener('click', () => {
+      if (searchPokemon > 1) {
+        searchPokemon -= 1;
+        renderPokemon(searchPokemon);
+      }
     });
 
-    mostrarPagina(1);
-  }
+    buttonNext.addEventListener('click', () => {
+      searchPokemon += 1;
+      renderPokemon(searchPokemon);
+    });
 
-  // Funções para navegação da paginação
-  function proximaPagina() {
-    const totalPaginas = Math.ceil(pokemonsFiltrados.length / porPagina);
-    if (paginaAtual < totalPaginas) {
-      mostrarPagina(paginaAtual + 1);
-    }
-  }
-
-  function anteriorPagina() {
-    if (paginaAtual > 1) {
-      mostrarPagina(paginaAtual - 1);
-    }
-  }
-
-  // Função para abrir modal com detalhes do Pokémon
-  async function abrirModal(pokemon) {
-    // Nome capitalizado
-    const nome = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
-
-    // Tradução dos tipos
-    const tipos = pokemon.types.map(t => typeTranslations[t.type.name] || t.type.name).join(', ');
-
-    // Tradução das habilidades
-    const habilidades = pokemon.abilities.map(a => abilityTranslations[a.ability.name] || a.ability.name).join(', ');
-
-    // Status formatado
-    const status = pokemon.stats.map(s => `<li><strong>${s.stat.name.toUpperCase()}:</strong> ${s.base_stat}</li>`).join('');
-
-    // Imagem maior do Pokémon
-    const imagem = pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default;
-
-    // Busca cadeia de evolução
-    const evolucaoHTML = await pegarEvolucao(pokemon.species.url);
-
-    // Conteúdo do modal
-    modalBody.innerHTML = `
-      <h2>${nome}</h2>
-      <img src="${imagem}" alt="${nome}" />
-      <p><strong>Tipos:</strong> ${tipos}</p>
-      <p><strong>Habilidades:</strong> ${habilidades}</p>
-      <h3>Status</h3>
-      <ul style="list-style:none; padding-left:0;">${status}</ul>
-      <h3>Evolução</h3>
-      <div class="evolution-chain">${evolucaoHTML}</div>
-    `;
-
-    modal.classList.add('show');
-  }
-
-  // Função para fechar modal
-  function fecharModal() {
-    modal.classList.remove('show');
-  }
-
-  // Função que obtém a cadeia de evolução de uma espécie
-  async function pegarEvolucao(urlSpecies) {
-    try {
-      // Pega dados da espécie
-      const resEsp = await fetch(urlSpecies);
-      const dataEsp = await resEsp.json();
-
-      // Pega URL da cadeia de evolução
-      const urlEvo = dataEsp.evolution_chain.url;
-
-      // Pega dados da cadeia de evolução
-      const resEvo = await fetch(urlEvo);
-      const dataEvo = await resEvo.json();
-
-      // Função recursiva para extrair evolução em ordem
-      const evolucoes = [];
-      let current = dataEvo.chain;
-
-      do {
-        evolucoes.push(current.species.name);
-        current = current.evolves_to[0];
-      } while (current && current.hasOwnProperty('evolves_to'));
-
-      // Pega dados de cada evolução para mostrar imagem
-      const promises = evolucoes.map(nome => fetch(`https://pokeapi.co/api/v2/pokemon/${nome}`).then(r => r.json()));
-      const pokemonsEvolucao = await Promise.all(promises);
-
-      // Monta HTML para cadeia de evolução
-      return pokemonsEvolucao.map(p => `
-        <div>
-          <img src="${p.sprites.front_default}" alt="${p.name}" />
-          <div>${p.name.charAt(0).toUpperCase() + p.name.slice(1)}</div>
-        </div>
-      `).join('');
-    } catch {
-      return '<p>Informação de evolução indisponível.</p>';
-    }
-  }
-
-  // Fecha modal ao clicar fora do conteúdo
-  modal.addEventListener('click', e => {
-    if (e.target === modal) fecharModal();
-  });
-
-  // Inicializa tudo ao carregar a página
-  window.onload = carregarPokemons;
-
-</script>
+    renderPokemon(searchPokemon);
+  </script>
 
 </body>
 </html>
+
